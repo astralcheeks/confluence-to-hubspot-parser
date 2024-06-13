@@ -15,17 +15,17 @@ def get_confluence_content(page_id):
     }
 
     response = requests.get(url, headers=headers, auth=auth)
-    print(f"Request URL: {url}")
-    print(f"Response Status Code: {response.status_code}")
     if response.status_code == 200:
         confluence_data = response.json()
         content = confluence_data['body']['export_view']['value']
+        page_title = confluence_data['title']
+        print(f"\nFound page: {page_title}...")
 
         with open("confluence_page.html", 'w') as test_file:
             test_file.write(content)
 
         print(f"Retrieved content from Confluence...")
-        return content
+        return content, page_title
     else:
         print(f"Failed to retrieve content from Confluence. Status code: {response.status_code}")
         print(f"Response: {response.text}")

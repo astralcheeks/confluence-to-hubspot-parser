@@ -6,7 +6,8 @@ hubspot_access_token = 'hubspot_access_token'
 hubspot_base_url = 'hubspot_base_url'
 
 # Creates a website page in HubSpot
-def create_hubspot_page(page_name, template_path, domain, slug, parsed_content):
+def create_hubspot_page(page_name, template_path, domain, slug, parsed_content, page_title):
+    print("Creating page in Hubspot...")
     url = f"{hubspot_base_url}/cms/v3/pages/site-pages"
     headers = {
         'Content-Type': 'application/json',
@@ -15,6 +16,7 @@ def create_hubspot_page(page_name, template_path, domain, slug, parsed_content):
 
     page_details = {
         "name": page_name,
+        "htmlTitle": page_title,
         "templatePath": template_path,
         "domain": domain,
         "slug": slug,
@@ -50,8 +52,8 @@ def create_hubspot_page(page_name, template_path, domain, slug, parsed_content):
     response = requests.post(url, headers=headers, data=page_data)
 
     if response.status_code == 201:
-        print("Page created successfully.")
+        print("\n\nPage created successfully.\n")
     else:
-        print("Failed to create page.")
+        print("\n\nFailed to create page.")
         print("Status Code:", response.status_code)
         print("Response:", response.text)

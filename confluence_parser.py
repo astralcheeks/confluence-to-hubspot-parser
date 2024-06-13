@@ -59,7 +59,7 @@ def handle_content(confluence_soup):
 def parse_files(confluence_content):
     try:
         confluence_soup = BeautifulSoup(confluence_content, 'html.parser')
-        print(f"\nProcessing html...")
+        print(f"Processing html...")
         return handle_content(confluence_soup)
     except Exception as e:
         print(f"Error processing: {e}")
