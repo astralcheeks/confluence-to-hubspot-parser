@@ -11,6 +11,21 @@ from bs4 import BeautifulSoup
 def cleanup_attributes(confluence_soup):
     return
 
+def handle_images(confluence_soup):
+    image_tags = confluence_soup.find_all(class_="confluence-embedded-file-wrapper")
+    image_sources = []
+    image_filenames = []
+
+    for tag in image_tags:
+        image_sources.append(tag.img['src'])
+        image_filenames.append(tag.img['alt'])
+        tag.img['src'] = tag.img['alt']
+
+    print(image_sources)
+    print(image_filenames)
+
+    return image_sources, image_filenames
+
 # Handle infoboxes
 def handle_infobox(confluence_soup):
     infoboxes = confluence_soup.find_all(class_="confluence-information-macro confluence-information-macro-information")
@@ -64,7 +79,8 @@ def handle_content(confluence_soup):
     confluence_soup = handle_expands(confluence_soup)
     confluence_soup = handle_infobox(confluence_soup)
     confluence_soup = center_images(confluence_soup)
-    return str(confluence_soup)
+    image_sources, image_filenames = handle_images(confluence_soup)
+    return str(confluence_soup), image_sources, image_filenames
 
 # Parses each file in the directory
 def parse_files(confluence_content):
