@@ -64,6 +64,25 @@ def handle_content(confluence_soup):
     confluence_soup = handle_expands(confluence_soup)
     confluence_soup = handle_infobox(confluence_soup)
     confluence_soup = center_images(confluence_soup)
+
+    # Add CSS for Times New Roman font and text indentation
+    style_tag = confluence_soup.new_tag("style")
+    style_tag.string = """
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.2em;
+            text-indent: 4em; /* This is an Indentation of about 4 tab spaces, we can change later */
+        }
+    """
+
+    if confluence_soup.head:
+        confluence_soup.head.insert(0, style_tag)
+    else:
+        head_tag = confluence_soup.new_tag("head")
+        head_tag.insert(0, style_tag)
+        confluence_soup.insert(0, head_tag)
+
+
     return str(confluence_soup)
 
 # Parses each file in the directory
