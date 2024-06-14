@@ -1,4 +1,3 @@
-import os
 from bs4 import BeautifulSoup
 
 # We can add more functions here as necessary
@@ -41,8 +40,12 @@ def handle_expands(confluence_soup):
 
     for item in expands:
         item.name = "details"
+        
+        summary = confluence_soup.new_tag("summary")
+        summary.string = "More info"
+        item.insert(0, summary)
 
-    for item in expands_garbage:
+    for item in expands_garbage: 
         item.decompose()
 
     return confluence_soup
