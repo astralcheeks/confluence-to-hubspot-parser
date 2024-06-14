@@ -40,7 +40,7 @@ def handle_expands(confluence_soup):
 
     for item in expands:
         item.name = "details"
-        
+
         summary = confluence_soup.new_tag("summary")
         summary.string = "More info"
         item.insert(0, summary)
@@ -62,7 +62,7 @@ def handle_content(confluence_soup):
 def parse_files(confluence_content):
     try:
         confluence_soup = BeautifulSoup(confluence_content, 'html.parser')
-        print(f"Processing html...")
+        print(f"Processing HTML...")
         return handle_content(confluence_soup)
     except Exception as e:
         print(f"Error processing: {e}")
