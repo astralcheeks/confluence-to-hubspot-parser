@@ -50,12 +50,20 @@ def handle_expands(confluence_soup):
 
     return confluence_soup
 
+# Function to center images using CSS
+def center_images(confluence_soup):
+    images = confluence_soup.find_all('img')
+    for img in images:
+        img['style'] = "display: block; margin: 0 auto;"  # Center image horizontally
+
+    return confluence_soup
+
 # Makes necessary changes and parses html
 def handle_content(confluence_soup):
 
     confluence_soup = handle_expands(confluence_soup)
     confluence_soup = handle_infobox(confluence_soup)
-
+    confluence_soup = center_images(confluence_soup)
     return str(confluence_soup)
 
 # Parses each file in the directory
