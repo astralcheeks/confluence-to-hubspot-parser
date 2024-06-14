@@ -1,10 +1,10 @@
 import requests
-import json
+import config
 
 # Confluence API credentials
-confluence_username = 'confluence_username'
-confluence_api_token = 'confluence_api_token'
-confluence_base_url = 'confluence_base_url'
+confluence_username = config.confluence_username
+confluence_api_token = config.confluence_api_token
+confluence_base_url = config.confluence_base_url
 
 # Retrieves content from Confluence
 def get_confluence_content(page_id):

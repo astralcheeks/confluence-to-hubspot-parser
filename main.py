@@ -10,7 +10,7 @@ def main():
     parsed_content = parse_confluence_content(confluence_content)
 
     if parsed_content:
-        create_hubspot_page(page_name='ExpandTest2',
+        create_hubspot_page(page_name=page_title,
                             template_path='/templateTest.html',
                             domain='salmouradinc-46445795.hubspotpagebuilder.com',
                             slug='testpage',
