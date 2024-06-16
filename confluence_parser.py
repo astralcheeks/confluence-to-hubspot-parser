@@ -71,7 +71,6 @@ def handle_content(confluence_soup):
         body {
             font-family: 'Times New Roman', Times, serif;
             font-size: 1.2em;
-            text-indent: 4em; /* This is an Indentation of about 4 tab spaces, we can change later */
         }
     """
 
