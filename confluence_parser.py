@@ -29,6 +29,7 @@ def handle_info_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: var(--ds-background-accent-blue-subtlest, #deebff);"
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
 
     return confluence_soup
@@ -63,6 +64,7 @@ def handle_note_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: #f3f0fe;"  # Light purple background
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
     return confluence_soup
 
@@ -84,6 +86,7 @@ def handle_success_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: #dbfcf1;"  # Light green background
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
     return confluence_soup
 
@@ -97,8 +100,6 @@ def handle_warning_panel(confluence_soup):
         warning_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"triangle exclamation\"\
                             style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Exclamation Triangle icon\" %} "
         
-
-
         item.p.insert(0, warning_icon)
 
         item['style'] = (
@@ -108,6 +109,7 @@ def handle_warning_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: var(--ds-background-accent-yellow-subtlest, #fffae6);"
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
     return confluence_soup
 
@@ -129,6 +131,7 @@ def handle_error_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: var(--ds-background-accent-red-subtlest, #FFEBE6);"  # Light red background
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
     return confluence_soup
 
