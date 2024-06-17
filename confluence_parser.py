@@ -25,14 +25,14 @@ def handle_images(confluence_soup, page_title):
     return image_sources, image_filenames
 
 # Handle infoboxes
-def handle_infobox(confluence_soup):
+def handle_info_panel(confluence_soup):
     infoboxes = confluence_soup.find_all(class_="confluence-information-macro confluence-information-macro-information")
     for item in infoboxes:
         info_icon = confluence_soup.new_tag("span")
         info_icon['data-hs-icon-hubl'] = "true"
-        info_icon['style'] = "display: inline-block; fill: #33475b;"
+        info_icon['style'] = "display: inline-block; fill: #2479f8; padding-right: 8px;"
         info_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"Circle Info\"\
-                            style=\"SOLID\" height=\"14\" purpose=\"decorative\" title=\"Circle Info icon\" %} "
+                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Circle Info icon\" %} "
         item.p.insert(0, info_icon)
 
         item['style'] = (
@@ -44,6 +44,105 @@ def handle_infobox(confluence_soup):
             "margin: .75rem 0 0;"
         )
 
+    return confluence_soup
+
+def handle_note_panel(confluence_soup):
+    # Handle notes panel boxes
+    notes_boxes = confluence_soup.find_all(class_="panel")
+    for item in notes_boxes:
+        note_icon = confluence_soup.new_tag("span")
+        note_icon['data-hs-icon-hubl'] = "true"
+        note_icon['style'] = "display: inline-block; fill: #8270db; padding-right: 8px;"  # Purple color
+        # Specify the correct icon name and check if "Memo" is available in your Font Awesome version
+        note_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"clipboard\" \
+                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"clipboard\" %} "
+        item.p.insert(0, note_icon)
+
+        panel_contents = confluence_soup.find_all(class_="panelContent")
+    
+    for panel_content in panel_contents:
+        if 'style' in panel_content.attrs:
+            # Spliting the style attr into individual styles
+            styles = panel_content['style'].split(';')
+            # remove the unwatned background color
+            styles = [style for style in styles if 'background-color' not in style.strip()]
+            # remake the style attrb
+            panel_content['style'] = '; '.join(styles).strip('; ')
+
+        item['style'] = (
+            "padding-top: 8px;"
+            "padding-right: 16px;"
+            "padding-bottom: 8px;"
+            "padding-left: 8px;"
+            "background-color: #f3f0fe;"  # Light purple background
+            "margin: .75rem 0 0;"
+        )
+    return confluence_soup
+
+def handle_success_panel(confluence_soup):
+    # Handle success panel boxes
+    success_boxes = confluence_soup.find_all(class_="confluence-information-macro confluence-information-macro-tip")
+    for item in success_boxes:
+        success_icon = confluence_soup.new_tag("span")
+        success_icon['data-hs-icon-hubl'] = "true"
+        success_icon['style'] = "display: inline-block; fill: #2e7d32; padding-right: 8px;"  # Green color
+        success_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"Circle Check\"\
+                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Check Circle icon\" %} "
+        item.p.insert(0, success_icon)
+
+        item['style'] = (
+            "padding-top: 8px;"
+            "padding-right: 16px;"
+            "padding-bottom: 8px;"
+            "padding-left: 8px;"
+            "background-color: #dbfcf1;"  # Light green background
+            "margin: .75rem 0 0;"
+        )
+    return confluence_soup
+
+def handle_warning_panel(confluence_soup):
+    # Handle warning panel boxes
+    warning_boxes = confluence_soup.find_all(class_="confluence-information-macro confluence-information-macro-note")
+    for item in warning_boxes:
+        warning_icon = confluence_soup.new_tag("span")
+        warning_icon['data-hs-icon-hubl'] = "true"
+        warning_icon['style'] = "display: inline-block; fill: #ff9800; padding-right: 8px;"  # Orange color
+        warning_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"triangle exclamation\"\
+                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Exclamation Triangle icon\" %} "
+        
+
+
+        item.p.insert(0, warning_icon)
+
+        item['style'] = (
+            "padding-top: 8px;"
+            "padding-right: 16px;"
+            "padding-bottom: 8px;"
+            "padding-left: 8px;"
+            "background-color: var(--ds-background-accent-yellow-subtlest, #fffae6);"
+            "margin: .75rem 0 0;"
+        )
+    return confluence_soup
+
+def handle_error_panel(confluence_soup):
+    # Handle error panel boxes
+    error_boxes = confluence_soup.find_all(class_="confluence-information-macro confluence-information-macro-warning")
+    for item in error_boxes:
+        error_icon = confluence_soup.new_tag("span")
+        error_icon['data-hs-icon-hubl'] = "true"
+        error_icon['style'] = "display: inline-block; fill: #d32f2f; padding-right: 8px;"  # Red color
+        error_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"circle xmark\"\
+                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Times Circle icon\" %} "
+        item.p.insert(0, error_icon)
+
+        item['style'] = (
+            "padding-top: 8px;"
+            "padding-right: 16px;"
+            "padding-bottom: 8px;"
+            "padding-left: 8px;"
+            "background-color: var(--ds-background-accent-red-subtlest, #FFEBE6);"  # Light red background
+            "margin: .75rem 0 0;"
+        )
     return confluence_soup
 
 # Handles expandable elements
@@ -75,9 +174,31 @@ def center_images(confluence_soup):
 def handle_content(confluence_soup, page_title):
 
     confluence_soup = handle_expands(confluence_soup)
-    confluence_soup = handle_infobox(confluence_soup)
+    confluence_soup = handle_info_panel(confluence_soup)
+    confluence_soup = handle_note_panel(confluence_soup)
+    confluence_soup = handle_success_panel(confluence_soup)
+    confluence_soup = handle_warning_panel(confluence_soup)
+    confluence_soup = handle_error_panel(confluence_soup)
     confluence_soup = center_images(confluence_soup)
     image_sources, image_filenames = handle_images(confluence_soup, page_title)
+
+    # Add CSS for Times New Roman font and text indentation
+    style_tag = confluence_soup.new_tag("style")
+    style_tag.string = """
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.2em;
+        }
+    """
+
+    if confluence_soup.head:
+        confluence_soup.head.insert(0, style_tag)
+    else:
+        head_tag = confluence_soup.new_tag("head")
+        head_tag.insert(0, style_tag)
+        confluence_soup.insert(0, head_tag)
+
+
     return str(confluence_soup), image_sources, image_filenames
 
 # Parses each file in the directory
