@@ -17,13 +17,15 @@ def main():
         confluence_content, page_title = get_confluence_content(page_id=page_id)
         parsed_content, image_sources, image_filenames = parse_confluence_content(confluence_content)
 
-        # if parsed_content:
-        #     create_hubspot_page(page_name=page_title,
-        #                         template_path='/templateTest.html',
-        #                         domain='salmouradinc-46445795.hubspotpagebuilder.com',
-        #                         slug='testpage',
-        #                         parsed_content=parsed_content,
-        #                         page_title=page_title)
+        if parsed_content:
+            create_hubspot_page(page_name=page_title,
+                                template_path='/templateTest.html',
+                                domain='salmouradinc-46445795.hubspotpagebuilder.com',
+                                slug='testpage',
+                                parsed_content=parsed_content,
+                                page_title=page_title,
+                                image_sources=image_sources,
+                                image_filenames=image_filenames)
         
     print("\nAll pages processed. Goodbye!\n")
 

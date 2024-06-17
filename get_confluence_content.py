@@ -1,5 +1,6 @@
 import requests
 import config
+import json
 
 # Confluence API credentials
 confluence_username = config.confluence_username
@@ -20,10 +21,6 @@ def get_confluence_content(page_id):
         content = confluence_data['body']['export_view']['value']
         page_title = confluence_data['title']
         print(f"\nFound page: {page_title}...")
-
-        with open("confluence_page.html", 'w') as test_file:
-            test_file.write(content)
-
         print(f"Retrieved content from Confluence...")
         return content, page_title
     else:

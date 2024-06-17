@@ -21,9 +21,6 @@ def handle_images(confluence_soup):
         image_filenames.append(tag.img['alt'])
         tag.img['src'] = tag.img['alt']
 
-    print(image_sources)
-    print(image_filenames)
-
     return image_sources, image_filenames
 
 # Handle infoboxes
