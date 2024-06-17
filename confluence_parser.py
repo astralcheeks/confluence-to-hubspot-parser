@@ -49,6 +49,7 @@ def handle_info_panel(confluence_soup):
 def handle_note_panel(confluence_soup):
     # Handle notes panel boxes
     notes_boxes = confluence_soup.find_all(class_="panel")
+    panel_contents = confluence_soup.find_all(class_="panelContent")
     for item in notes_boxes:
         note_icon = confluence_soup.new_tag("span")
         note_icon['data-hs-icon-hubl'] = "true"
@@ -57,8 +58,6 @@ def handle_note_panel(confluence_soup):
         note_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"clipboard\" \
                             style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"clipboard\" %} "
         item.p.insert(0, note_icon)
-
-        panel_contents = confluence_soup.find_all(class_="panelContent")
     
     for panel_content in panel_contents:
         if 'style' in panel_content.attrs:
