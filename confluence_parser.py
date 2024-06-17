@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import config
 
 # We can add more functions here as necessary
 
@@ -11,7 +12,7 @@ from bs4 import BeautifulSoup
 def cleanup_attributes(confluence_soup):
     return
 
-def handle_images(confluence_soup):
+def handle_images(confluence_soup, page_title):
     image_tags = confluence_soup.find_all(class_="confluence-embedded-file-wrapper")
     image_sources = []
     image_filenames = []
@@ -19,7 +20,7 @@ def handle_images(confluence_soup):
     for tag in image_tags:
         image_sources.append(tag.img['src'])
         image_filenames.append(tag.img['alt'])
-        tag.img['src'] = tag.img['alt']
+        tag.img['src'] = f"{config.hubspot_library_url}/{page_title}/{tag.img['alt']}"
 
     return image_sources, image_filenames
 
@@ -71,27 +72,27 @@ def center_images(confluence_soup):
     return confluence_soup
 
 # Makes necessary changes and parses html
-def handle_content(confluence_soup):
+def handle_content(confluence_soup, page_title):
 
     confluence_soup = handle_expands(confluence_soup)
     confluence_soup = handle_infobox(confluence_soup)
     confluence_soup = center_images(confluence_soup)
-    image_sources, image_filenames = handle_images(confluence_soup)
+    image_sources, image_filenames = handle_images(confluence_soup, page_title)
     return str(confluence_soup), image_sources, image_filenames
 
 # Parses each file in the directory
-def parse_files(confluence_content):
+def parse_files(confluence_content, page_title):
     try:
         confluence_soup = BeautifulSoup(confluence_content, 'html.parser')
         print(f"Processing HTML...")
-        return handle_content(confluence_soup)
+        return handle_content(confluence_soup, page_title)
     except Exception as e:
         print(f"Error processing: {e}")
 
 # Main function
-def parse_confluence_content(confluence_content):
+def parse_confluence_content(confluence_content, page_title):
     if confluence_content:
-        return parse_files(confluence_content) 
+        return parse_files(confluence_content, page_title) 
     else:
         print("\nNo parseable files found here.\n")
         return None

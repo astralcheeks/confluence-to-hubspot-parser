@@ -15,7 +15,7 @@ def main():
     for page_id in pages:
         print(f"\nTreating page ID: {page_id}...")
         confluence_content, page_title = get_confluence_content(page_id=page_id)
-        parsed_content, image_sources, image_filenames = parse_confluence_content(confluence_content)
+        parsed_content, image_sources, image_filenames = parse_confluence_content(confluence_content, page_title)
 
         if parsed_content:
             create_hubspot_page(page_name=page_title,
