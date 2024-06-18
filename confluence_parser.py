@@ -174,6 +174,13 @@ def center_images(confluence_soup):
 
     return confluence_soup
 
+def handle_code_blocks(confluence_soup):
+    code_blocks = confluence_soup.find_all('code')
+    for code in code_blocks:
+        code['style'] = "background-color: #F4F5F7; padding: 0.2em 0.4em; border-radius: 0.3em;"
+
+    return confluence_soup
+
 # Makes necessary changes and parses html
 def handle_content(confluence_soup, page_title):
 
@@ -183,8 +190,10 @@ def handle_content(confluence_soup, page_title):
     confluence_soup = handle_success_panel(confluence_soup)
     confluence_soup = handle_warning_panel(confluence_soup)
     confluence_soup = handle_error_panel(confluence_soup)
+    confluence_soup = handle_code_blocks(confluence_soup)
     confluence_soup = center_images(confluence_soup)
     image_sources, image_filenames = handle_images(confluence_soup, page_title)
+
 
     # Add CSS for Times New Roman font and text indentation
     style_tag = confluence_soup.new_tag("style")
