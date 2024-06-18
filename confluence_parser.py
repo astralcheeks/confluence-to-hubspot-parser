@@ -157,7 +157,7 @@ def handle_expands(confluence_soup):
 def center_images(confluence_soup):
     images = confluence_soup.find_all('img')
     for img in images:
-        img['style'] = "display: block; margin: 0 auto; border: 3px solid #ccc; padding: 5px;"  # Center image horizontally
+        img['style'] = "display: block; margin: 0 auto; border: 3px solid #ccc; padding: 5px; margin-bottom: 30px;" 
 
     return confluence_soup
 
