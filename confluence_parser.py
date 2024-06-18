@@ -189,7 +189,7 @@ def handle_content(confluence_soup, page_title):
     style_tag = confluence_soup.new_tag("style")
     style_tag.string = """
         body {
-            font-family: 'Times New Roman', Times, serif;
+            font-family: helvetica, sans-serif;
             font-size: 1.2em;
         }
     """
