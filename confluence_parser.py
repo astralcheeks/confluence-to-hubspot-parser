@@ -154,6 +154,7 @@ def handle_expands(confluence_soup):
 
     for item in expands:
         item.name = "details"
+        item['style'] = 'border: 1px solid #ccc; display: block; padding: 8px; border-radius: 5px'
 
         # create summary tag
         summary = confluence_soup.new_tag("summary")
