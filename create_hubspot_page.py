@@ -43,7 +43,7 @@ def upload_images(image_sources, image_filenames, page_title):
             'file': open(filename, 'rb'),
             'folderPath': folder_path,
             'fileName': filename,
-            'options': '{"access": "PUBLIC_INDEXABLE"}'
+            'options': '{"access": "PUBLIC_INDEXABLE", "overwrite": "true"}'
         }
         response = requests.post(url, headers=headers, files=files)
         if response.status_code == 201:
