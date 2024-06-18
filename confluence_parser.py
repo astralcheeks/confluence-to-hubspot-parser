@@ -30,7 +30,7 @@ def handle_info_panel(confluence_soup):
     for item in infoboxes:
         info_icon = confluence_soup.new_tag("span")
         info_icon['data-hs-icon-hubl'] = "true"
-        info_icon['style'] = "display: inline-block; fill: #2479f8; padding-right: 8px;"
+        info_icon['style'] = "display: inline-block; fill: #2479f8; padding-right: 8px; vertical-align: middle;"
         info_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"Circle Info\"\
                             style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Circle Info icon\" %} "
         item.p.insert(0, info_icon)
@@ -42,6 +42,7 @@ def handle_info_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: var(--ds-background-accent-blue-subtlest, #deebff);"
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
 
     return confluence_soup
@@ -53,7 +54,7 @@ def handle_note_panel(confluence_soup):
     for item in notes_boxes:
         note_icon = confluence_soup.new_tag("span")
         note_icon['data-hs-icon-hubl'] = "true"
-        note_icon['style'] = "display: inline-block; fill: #8270db; padding-right: 8px;"  # Purple color
+        note_icon['style'] = "display: inline-block; fill: #8270db; padding-right: 8px; vertical-align: middle;"  # Purple color
         # Specify the correct icon name and check if "Memo" is available in your Font Awesome version
         note_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"clipboard\" \
                             style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"clipboard\" %} "
@@ -75,6 +76,7 @@ def handle_note_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: #f3f0fe;"  # Light purple background
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
     return confluence_soup
 
@@ -84,7 +86,7 @@ def handle_success_panel(confluence_soup):
     for item in success_boxes:
         success_icon = confluence_soup.new_tag("span")
         success_icon['data-hs-icon-hubl'] = "true"
-        success_icon['style'] = "display: inline-block; fill: #2e7d32; padding-right: 8px;"  # Green color
+        success_icon['style'] = "display: inline-block; fill: #2e7d32; padding-right: 8px; vertical-align: middle;"  # Green color
         success_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"Circle Check\"\
                             style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Check Circle icon\" %} "
         item.p.insert(0, success_icon)
@@ -96,6 +98,7 @@ def handle_success_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: #dbfcf1;"  # Light green background
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
     return confluence_soup
 
@@ -105,12 +108,10 @@ def handle_warning_panel(confluence_soup):
     for item in warning_boxes:
         warning_icon = confluence_soup.new_tag("span")
         warning_icon['data-hs-icon-hubl'] = "true"
-        warning_icon['style'] = "display: inline-block; fill: #ff9800; padding-right: 8px;"  # Orange color
+        warning_icon['style'] = "display: inline-block; fill: #ff9800; padding-right: 8px; vertical-align: middle;"  # Orange color
         warning_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"triangle exclamation\"\
                             style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Exclamation Triangle icon\" %} "
         
-
-
         item.p.insert(0, warning_icon)
 
         item['style'] = (
@@ -120,6 +121,7 @@ def handle_warning_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: var(--ds-background-accent-yellow-subtlest, #fffae6);"
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
     return confluence_soup
 
@@ -129,7 +131,7 @@ def handle_error_panel(confluence_soup):
     for item in error_boxes:
         error_icon = confluence_soup.new_tag("span")
         error_icon['data-hs-icon-hubl'] = "true"
-        error_icon['style'] = "display: inline-block; fill: #d32f2f; padding-right: 8px;"  # Red color
+        error_icon['style'] = "display: inline-block; fill: #d32f2f; padding-right: 8px; vertical-align: middle;"  # Red color
         error_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"circle xmark\"\
                             style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Times Circle icon\" %} "
         item.p.insert(0, error_icon)
@@ -141,6 +143,7 @@ def handle_error_panel(confluence_soup):
             "padding-left: 8px;"
             "background-color: var(--ds-background-accent-red-subtlest, #FFEBE6);"  # Light red background
             "margin: .75rem 0 0;"
+            "border-radius: var(--ds-border-radius,4px);"
         )
     return confluence_soup
 
@@ -152,6 +155,7 @@ def handle_expands(confluence_soup):
     for item in expands:
         item.name = "details"
 
+        # create summary tag
         summary = confluence_soup.new_tag("summary")
         summary.string = "More info"
         item.insert(0, summary)
