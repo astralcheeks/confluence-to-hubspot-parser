@@ -17,7 +17,7 @@ def main():
 
         if parsed_content:
             create_hubspot_page(page_name=page_title,
-                                template_path='/templateTest.html',
+                                template_path='/MainTempalte.html',
                                 domain='salmouradinc-46445795.hubspotpagebuilder.com',
                                 slug='testpage',
                                 parsed_content=parsed_content,
@@ -26,3 +26,4 @@ def main():
     print("\nAll pages processed. Goodbye!\n")
 
 main()
+

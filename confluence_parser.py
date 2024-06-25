@@ -11,17 +11,36 @@ from bs4 import BeautifulSoup
 def cleanup_attributes(confluence_soup):
     return
 
-# Handle infoboxes
 def handle_info_panel(confluence_soup):
     infoboxes = confluence_soup.find_all(class_="confluence-information-macro confluence-information-macro-information")
     for item in infoboxes:
+        # Create a wrapper div
+        wrapper_div = confluence_soup.new_tag("div")
+        wrapper_div['style'] = "display: flex; align-items: flex-start;"
+
+        # Create the info icon span
         info_icon = confluence_soup.new_tag("span")
         info_icon['data-hs-icon-hubl'] = "true"
-        info_icon['style'] = "display: inline-block; fill: #2479f8; padding-right: 8px; vertical-align: middle;"
-        info_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"Circle Info\"\
-                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Circle Info icon\" %} "
-        item.p.insert(0, info_icon)
+        info_icon['style'] = "display: inline-block; fill: #2479f8; padding-right: 8px; padding-top: 16px; vertical-align: baseline;"
+        info_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"Circle Info\" style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Circle Info icon\" %} "
+        
+        # Create the text content div
+        text_content_div = confluence_soup.new_tag("div")
+        text_content_div['style'] = "flex: 1; display: inline-block;"
 
+        # Move all children of the item to the text content div
+        for child in item.find_all(recursive=False):
+            text_content_div.append(child.extract())
+
+        # Append the info icon and text content div to the wrapper div
+        wrapper_div.append(info_icon)
+        wrapper_div.append(text_content_div)
+        
+        # Replace the original item content with the wrapper div
+        item.clear()
+        item.append(wrapper_div)
+
+        # Apply the styling to the item
         item['style'] = (
             "padding-top: 8px;"
             "padding-right: 16px;"
@@ -34,29 +53,38 @@ def handle_info_panel(confluence_soup):
 
     return confluence_soup
 
+
 def handle_note_panel(confluence_soup):
     # Handle notes panel boxes
     notes_boxes = confluence_soup.find_all(class_="panel")
     for item in notes_boxes:
+        # Create a wrapper div
+        wrapper_div = confluence_soup.new_tag("div")
+        wrapper_div['style'] = "display: flex; align-items: flex-start;"
+
+        # Create the note icon span
         note_icon = confluence_soup.new_tag("span")
         note_icon['data-hs-icon-hubl'] = "true"
-        note_icon['style'] = "display: inline-block; fill: #8270db; padding-right: 8px; vertical-align: middle;"  # Purple color
-        # Specify the correct icon name and check if "Memo" is available in your Font Awesome version
-        note_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"clipboard\" \
-                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"clipboard\" %} "
-        item.p.insert(0, note_icon)
+        note_icon['style'] = "display: inline-block; fill: #8270db; padding-right: 8px; padding-top: 16px; vertical-align: baseline;"  # Purple color
+        note_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"clipboard\" style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"clipboard\" %} "
+        
+        # Create the text content div
+        text_content_div = confluence_soup.new_tag("div")
+        text_content_div['style'] = "flex: 1; display: inline-block;"
 
-        panel_contents = confluence_soup.find_all(class_="panelContent")
-    
-    for panel_content in panel_contents:
-        if 'style' in panel_content.attrs:
-            # Spliting the style attr into individual styles
-            styles = panel_content['style'].split(';')
-            # remove the unwatned background color
-            styles = [style for style in styles if 'background-color' not in style.strip()]
-            # remake the style attrb
-            panel_content['style'] = '; '.join(styles).strip('; ')
+        # Move all children of the item to the text content div
+        for child in item.find_all(recursive=False):
+            text_content_div.append(child.extract())
 
+        # Append the note icon and text content div to the wrapper div
+        wrapper_div.append(note_icon)
+        wrapper_div.append(text_content_div)
+
+        # Replace the original item content with the wrapper div
+        item.clear()
+        item.append(wrapper_div)
+
+        # Apply the styling to the item
         item['style'] = (
             "padding-top: 8px;"
             "padding-right: 16px;"
@@ -66,19 +94,53 @@ def handle_note_panel(confluence_soup):
             "margin: .75rem 0 0;"
             "border-radius: var(--ds-border-radius,4px);"
         )
+
+        # Remove background color from panelContent
+        panel_contents = item.find_all(class_="panelContent")
+        for panel_content in panel_contents:
+            if 'style' in panel_content.attrs:
+                # Remove background color style if it exists
+                styles = panel_content['style'].split(';')
+                styles = [style for style in styles if 'background-color' not in style.strip()]
+                panel_content['style'] = '; '.join(styles).strip('; ')
+            else:
+                # Ensure there is no background color
+                panel_content['style'] = ''
+
     return confluence_soup
+
 
 def handle_success_panel(confluence_soup):
     # Handle success panel boxes
     success_boxes = confluence_soup.find_all(class_="confluence-information-macro confluence-information-macro-tip")
     for item in success_boxes:
+        # Create a wrapper div
+        wrapper_div = confluence_soup.new_tag("div")
+        wrapper_div['style'] = "display: flex; align-items: flex-start;"
+
+        # Create the success icon span
         success_icon = confluence_soup.new_tag("span")
         success_icon['data-hs-icon-hubl'] = "true"
-        success_icon['style'] = "display: inline-block; fill: #2e7d32; padding-right: 8px; vertical-align: middle;"  # Green color
-        success_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"Circle Check\"\
-                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Check Circle icon\" %} "
-        item.p.insert(0, success_icon)
+        success_icon['style'] = "display: inline-block; fill: #2e7d32; padding-right: 8px; padding-top: 16px; vertical-align: baseline;"  # Green color
+        success_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"Circle Check\" style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Check Circle icon\" %} "
+        
+        # Create the text content div
+        text_content_div = confluence_soup.new_tag("div")
+        text_content_div['style'] = "flex: 1; display: inline-block;"
 
+        # Move all children of the item to the text content div
+        for child in item.find_all(recursive=False):
+            text_content_div.append(child.extract())
+
+        # Append the success icon and text content div to the wrapper div
+        wrapper_div.append(success_icon)
+        wrapper_div.append(text_content_div)
+
+        # Replace the original item content with the wrapper div
+        item.clear()
+        item.append(wrapper_div)
+
+        # Apply the styling to the item
         item['style'] = (
             "padding-top: 8px;"
             "padding-right: 16px;"
@@ -88,20 +150,40 @@ def handle_success_panel(confluence_soup):
             "margin: .75rem 0 0;"
             "border-radius: var(--ds-border-radius,4px);"
         )
+
     return confluence_soup
 
 def handle_warning_panel(confluence_soup):
     # Handle warning panel boxes
     warning_boxes = confluence_soup.find_all(class_="confluence-information-macro confluence-information-macro-note")
     for item in warning_boxes:
+        # Create a wrapper div
+        wrapper_div = confluence_soup.new_tag("div")
+        wrapper_div['style'] = "display: flex; align-items: flex-start;"
+
+        # Create the warning icon span
         warning_icon = confluence_soup.new_tag("span")
         warning_icon['data-hs-icon-hubl'] = "true"
-        warning_icon['style'] = "display: inline-block; fill: #ff9800; padding-right: 8px; vertical-align: middle;"  # Orange color
-        warning_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"triangle exclamation\"\
-                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Exclamation Triangle icon\" %} "
+        warning_icon['style'] = "display: inline-block; fill: #ff9800; padding-right: 8px; padding-top: 16px; vertical-align: baseline;"  # Orange color
+        warning_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"triangle exclamation\" style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Exclamation Triangle icon\" %} "
         
-        item.p.insert(0, warning_icon)
+        # Create the text content div
+        text_content_div = confluence_soup.new_tag("div")
+        text_content_div['style'] = "flex: 1; display: inline-block;"
 
+        # Move all children of the item to the text content div
+        for child in item.find_all(recursive=False):
+            text_content_div.append(child.extract())
+
+        # Append the warning icon and text content div to the wrapper div
+        wrapper_div.append(warning_icon)
+        wrapper_div.append(text_content_div)
+
+        # Replace the original item content with the wrapper div
+        item.clear()
+        item.append(wrapper_div)
+
+        # Apply the styling to the item
         item['style'] = (
             "padding-top: 8px;"
             "padding-right: 16px;"
@@ -111,19 +193,40 @@ def handle_warning_panel(confluence_soup):
             "margin: .75rem 0 0;"
             "border-radius: var(--ds-border-radius,4px);"
         )
+
     return confluence_soup
 
 def handle_error_panel(confluence_soup):
     # Handle error panel boxes
     error_boxes = confluence_soup.find_all(class_="confluence-information-macro confluence-information-macro-warning")
     for item in error_boxes:
+        # Create a wrapper div
+        wrapper_div = confluence_soup.new_tag("div")
+        wrapper_div['style'] = "display: flex; align-items: flex-start;"
+
+        # Create the error icon span
         error_icon = confluence_soup.new_tag("span")
         error_icon['data-hs-icon-hubl'] = "true"
-        error_icon['style'] = "display: inline-block; fill: #d32f2f; padding-right: 8px; vertical-align: middle;"  # Red color
-        error_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"circle xmark\"\
-                            style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Times Circle icon\" %} "
-        item.p.insert(0, error_icon)
+        error_icon['style'] = "display: inline-block; fill: #d32f2f; padding-right: 8px; padding-top: 16px; vertical-align: baseline;"  # Red color
+        error_icon.string = "{% icon icon_set=\"fontawesome-6.4.2\" name=\"circle xmark\" style=\"SOLID\" height=\"24\" purpose=\"decorative\" title=\"Times Circle icon\" %} "
+        
+        # Create the text content div
+        text_content_div = confluence_soup.new_tag("div")
+        text_content_div['style'] = "flex: 1; display: inline-block;"
 
+        # Move all children of the item to the text content div
+        for child in item.find_all(recursive=False):
+            text_content_div.append(child.extract())
+
+        # Append the error icon and text content div to the wrapper div
+        wrapper_div.append(error_icon)
+        wrapper_div.append(text_content_div)
+
+        # Replace the original item content with the wrapper div
+        item.clear()
+        item.append(wrapper_div)
+
+        # Apply the styling to the item
         item['style'] = (
             "padding-top: 8px;"
             "padding-right: 16px;"
@@ -133,6 +236,7 @@ def handle_error_panel(confluence_soup):
             "margin: .75rem 0 0;"
             "border-radius: var(--ds-border-radius,4px);"
         )
+
     return confluence_soup
 
 # Handles expandable elements
