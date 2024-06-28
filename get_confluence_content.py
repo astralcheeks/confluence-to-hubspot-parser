@@ -19,14 +19,15 @@ def get_confluence_content(page_id):
         confluence_data = response.json()
         content = confluence_data['body']['export_view']['value']
         page_title = confluence_data['title']
+        confluence_url = f"{confluence_base_url}/spaces/{confluence_data['_expandable']['space']}/pages/{page_id}"
         print(f"\nFound page: {page_title}...")
 
         with open("confluence_page.html", 'w') as test_file:
             test_file.write(content)
 
         print(f"Retrieved content from Confluence...")
-        return content, page_title
+        return content, page_title, confluence_url
     else:
         print(f"Failed to retrieve content from Confluence. Status code: {response.status_code}")
         print(f"Response: {response.text}")
-        return None
+        return None, None, None
