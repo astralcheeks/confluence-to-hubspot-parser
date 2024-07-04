@@ -167,3 +167,19 @@ async def update_hubspot_page_async(session, hubspot_page_id, updated_content):
             print(f"Failed to update content for HubSpot page. Status code: {response.status}")
             return
         print(f"Successfully updated content for HubSpot page with ID {hubspot_page_id}")
+
+async def check_duplicate_titles(session, title):
+    url = f"{hubspot_base_url}/cms/v3/pages/site-pages"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {hubspot_access_token}'
+    }
+    async with session.get(url, headers=headers) as response:
+        if response.status == 200:
+            response_data = await response.json()
+            for page in response_data['results']:
+                if page['htmlTitle'] == title:
+                    return True, page['id'], page['url']
+        else:
+            print(f"Failed to check for duplicates in HubSpot. Status code: {response.status}")
+        return False, None, None

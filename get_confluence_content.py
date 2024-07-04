@@ -6,7 +6,6 @@ confluence_username = config.confluence_username
 confluence_api_token = config.confluence_api_token
 confluence_base_url = config.confluence_base_url
 
-# fetch Confluence page content, allowing multiple requests to be made concurrently.
 async def get_confluence_content_async(session, page_id):
     url = f"{confluence_base_url}/rest/api/content/{page_id}?expand=body.export_view"
     auth = aiohttp.BasicAuth(confluence_username, confluence_api_token)

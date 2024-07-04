@@ -188,16 +188,13 @@ def handle_error_panel(confluence_soup):
 
     return confluence_soup
 
-# Handles expandable elements
 def handle_expands(confluence_soup):
     expands = confluence_soup.find_all(class_='expand-container')
     expands_garbage = confluence_soup.find_all(class_='expand-control')
 
     for item in expands:
         item.name = "details"
-        item['style'] = 'border: 1px solid #ccc; display: block; padding: 8px; border-radius: 5px'
 
-        # create summary tag
         summary = confluence_soup.new_tag("summary")
         summary.string = "More info"
         item.insert(0, summary)
@@ -243,11 +240,10 @@ def handle_content(confluence_soup):
     confluence_soup = center_images(confluence_soup)
     confluence_soup, hyperlinks = handle_hyperlinks(confluence_soup)
 
-    # Add CSS for Times New Roman font and text indentation
     style_tag = confluence_soup.new_tag("style")
     style_tag.string = """
         body {
-            font-family: helvetica, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             font-size: 1.2em;
         }
     """
