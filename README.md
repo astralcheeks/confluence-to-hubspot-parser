@@ -34,6 +34,10 @@ This program is designed to make it easy to transfer Confluence pages to HubSpot
 <ul>
   <li><strong>Hyperlink Mapping:</strong> Updates internal links to point to the new HubSpot pages.</li>
 </ul>
+5. Prevents Porting Duplicate Pages:
+<ul>
+    <li><strong>Prompts user about duplicate page:</strong> The user is prompted on the duplicate page being ported and can choose whether to continue porting the page or not.</li>
+</ul>
 
 ---------------------------------------------------------------------------------------------------
 <h1>How to Use</h1>
