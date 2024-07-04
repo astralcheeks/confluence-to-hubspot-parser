@@ -87,35 +87,20 @@ def process_confluence_pages(confluence_data):
 async def main():
     print("\nThis program ports Confluence pages to Hubspot.\n")
 
-    # Record the start time
-    start_time = time.time()
-
     user_input = input("Enter the Confluence IDs of the pages you want to port. For multiple page IDs, separate them by comma ('12345,67890'): ")
     pages = parse_input(user_input)
     
     # Fetch Confluence pages
-    fetch_start_time = time.time()
     confluence_data = await fetch_confluence_pages(pages)
-    fetch_end_time = time.time()
-    print(f"\nTime taken to fetch Confluence pages: {fetch_end_time - fetch_start_time:.2f} seconds")
 
     # Process Confluence pages
-    process_start_time = time.time()
     parsed_contents, hyperlinks = process_confluence_pages(confluence_data)
-    process_end_time = time.time()
-    print(f"\nTime taken to process Confluence pages: {process_end_time - process_start_time:.2f} seconds")
 
     # Create HubSpot pages
-    create_start_time = time.time()
     await create_hubspot_pages(parsed_contents)
-    create_end_time = time.time()
-    print(f"\nTime taken to create HubSpot pages: {create_end_time - create_start_time:.2f} seconds")
 
     # Update links
-    update_start_time = time.time()
     await update_links(parsed_contents, hyperlinks)
-    update_end_time = time.time()
-    print(f"\nTime taken to update links: {update_end_time - update_start_time:.2f} seconds")
 
     # Verify that links have been updated correctly
     for page_id, (updated_content, page_title) in parsed_contents.items():
@@ -127,12 +112,9 @@ async def main():
                         assert url_mapping[original_url] in updated_content, f"Link to {original_url} was not updated correctly in page {page_id}"
                         print(f"Verified link for {original_url} updated correctly in page {page_id}")
 
-    # Record the end time
-    end_time = time.time()
 
-    # Calculate and print the total time taken
-    total_time = end_time - start_time
-    print(f"\nAll pages processed in {total_time:.2f} seconds. Goodbye!\n")
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+print("Goodbye!")
