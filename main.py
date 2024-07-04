@@ -31,12 +31,17 @@ async def create_hubspot_page_task(session, page_id, parsed_content, page_title)
     print(f"Checking for duplicates for Confluence page ID: {page_id}")
     is_duplicate, existing_id, existing_url = await check_duplicate_titles(session, page_title)
     if is_duplicate:
-        user_input = input(f"A page with the title '{page_title}' already exists in HubSpot. Do you want to create a duplicate? (yes/no): ")
-        if user_input.lower() != 'yes':
-            print(f"Skipping creation of duplicate page for Confluence page ID: {page_id}")
-            return page_id, existing_id, existing_url
+        while True: 
+            user_input = input(f"A page with the title '{page_title}' already exists in HubSpot. Do you want to create a duplicate? (yes/no): ")
+            if user_input.lower() == 'no':
+                print(f"Skipping creation of duplicate page for Confluence page ID: {page_id}")
+                return page_id, existing_id, existing_url
+            elif user_input == 'yes':
+                break
+            else:
+                print("Invalid response. Please enter 'yes' or 'no'")
 
-    print(f"Creating HubSpot page for Confluence page ID: {page_id}")
+    print(f"Creating HubSpot page for Confluence page ID: {page_id}") 
     hubspot_id, hubspot_url = await create_hubspot_page_async(session, page_name=page_title,
                                                   template_path='/WebsitePagesTemplate.html',
                                                   domain='salmouradinc-46445795.hubspotpagebuilder.com',
