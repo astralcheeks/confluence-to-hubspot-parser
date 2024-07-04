@@ -84,14 +84,12 @@ async def main():
     parsed_contents, hyperlinks = process_confluence_pages(confluence_data)
     
     # Create HubSpot pages
-    
     await create_hubspot_pages(parsed_contents)
-    
 
     # Update links
-   
     await update_links(parsed_contents, hyperlinks)
 
 
 if __name__ == "__main__":
     asyncio.run(main())
+    print("\nAll pages processed. Goodbye!\n")
