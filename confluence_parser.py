@@ -188,13 +188,16 @@ def handle_error_panel(confluence_soup):
 
     return confluence_soup
 
+# Handles expandable elements
 def handle_expands(confluence_soup):
     expands = confluence_soup.find_all(class_='expand-container')
     expands_garbage = confluence_soup.find_all(class_='expand-control')
 
     for item in expands:
         item.name = "details"
+        item['style'] = 'border: 1px solid #ccc; display: block; padding: 8px; border-radius: 5px'
 
+        # create summary tag
         summary = confluence_soup.new_tag("summary")
         summary.string = "More info"
         item.insert(0, summary)
