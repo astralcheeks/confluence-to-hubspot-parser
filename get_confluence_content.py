@@ -18,5 +18,4 @@ async def get_confluence_content_async(session, page_id):
         content = confluence_data['body']['export_view']['value']
         page_title = confluence_data['title']
         confluence_url = f"{confluence_base_url}/spaces/{confluence_data['_expandable']['space']}/pages/{page_id}"
-        print(f"\nFound page: {page_title}...")
         return content, page_title, confluence_url

@@ -231,6 +231,32 @@ def handle_hyperlinks(confluence_soup):
             hyperlinks[confluence_page_id] = href
     return confluence_soup, hyperlinks
 
+def handle_checkbox(confluence_soup):
+    checkboxes = confluence_soup.find_all(class_="placeholder-inline-tasks")
+    for checkbox in checkboxes:
+        input_element = confluence_soup.new_tag("input", type="checkbox")
+        if "checked" in checkbox.get("class", []):
+            input_element["checked"] = "checked"
+        
+        # this just keeps the text next to the checkbox when porting
+        checkbox_text = checkbox.get_text()
+
+        # this keeps the checkbox and the text together
+        span_element = confluence_soup.new_tag("span")
+        span_element.append(input_element)
+        span_element.append(checkbox_text)
+        
+        # changes checkbox placeholder with span element
+        checkbox.replace_with(span_element)
+    
+    # Bullets kept showing in HubSpot when porting. This removes the bullets. 
+    for ul in confluence_soup.find_all("ul", class_="inline-task-list"):
+        ul["style"] = "list-style-type: none; padding: 0;"
+        for li in ul.find_all("li"):
+            li["style"] = "list-style-type: none; padding: 0;"
+
+    return confluence_soup
+    
 
 def handle_content(confluence_soup):
     confluence_soup = handle_expands(confluence_soup)
@@ -242,6 +268,7 @@ def handle_content(confluence_soup):
     confluence_soup = handle_code_blocks(confluence_soup)
     confluence_soup = center_images(confluence_soup)
     confluence_soup, hyperlinks = handle_hyperlinks(confluence_soup)
+    confluence_soup = handle_checkbox(confluence_soup) 
 
     style_tag = confluence_soup.new_tag("style")
     style_tag.string = """
