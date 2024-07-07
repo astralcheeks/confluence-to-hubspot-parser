@@ -256,7 +256,29 @@ def handle_checkbox(confluence_soup):
             li["style"] = "list-style-type: none; padding: 0;"
 
     return confluence_soup
-    
+
+def handle_tables(confluence_soup):
+    tables = confluence_soup.find_all('table', class_='confluenceTable')
+    for table in tables:
+        table['style'] = "border-collapse: collapse; width: 100%;"
+        
+        # Process table headers
+        headers = table.find_all('th', class_='confluenceTh')
+        for header in headers:
+            header_style = "border: 1px solid #ddd; padding: 8px; background-color: {};".format(header.get('data-highlight-colour', '#f2f2f2'))
+            header['style'] = header_style
+            header['style'] += "text-align: left;"
+
+        # Process table cells
+        cells = table.find_all('td', class_='confluenceTd')
+        for cell in cells:
+            cell_style = "border: 1px solid #ddd; padding: 8px;"
+            cell['style'] = cell_style
+            highlight_color = cell.get('data-highlight-colour')
+            if highlight_color:
+                cell['style'] += "background-color: {};".format(highlight_color)
+
+    return confluence_soup
 
 def handle_content(confluence_soup):
     confluence_soup = handle_expands(confluence_soup)
@@ -269,6 +291,7 @@ def handle_content(confluence_soup):
     confluence_soup = center_images(confluence_soup)
     confluence_soup, hyperlinks = handle_hyperlinks(confluence_soup)
     confluence_soup = handle_checkbox(confluence_soup) 
+    confluence_soup = handle_tables(confluence_soup)
 
     style_tag = confluence_soup.new_tag("style")
     style_tag.string = """
