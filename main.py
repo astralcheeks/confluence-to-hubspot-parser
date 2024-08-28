@@ -1,6 +1,7 @@
 from confluence_parser import parse_confluence_content
 from get_confluence_content import get_confluence_content
 from create_hubspot_page import create_hubspot_page
+import config
 
 # Parses input and returns a list of all page IDs to parse
 def parse_input(user_input):
@@ -19,9 +20,9 @@ def main():
 
         if parsed_content:
             create_hubspot_page(page_name=page_title,
-                                template_path='/templateTest.html',
-                                domain='salmouradinc-46445795.hubspotpagebuilder.com',
-                                slug='testpage',
+                                template_path=config.template_path,
+                                domain=config.domain,
+                                slug='f{page_id}',
                                 parsed_content=parsed_content,
                                 page_title=page_title,
                                 image_sources=image_sources,

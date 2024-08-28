@@ -39,21 +39,22 @@ def upload_images(image_sources, image_filenames, page_title):
     for i, file_url in enumerate(image_sources):
         filename = image_filenames[i]
         download_image(file_url, filename)
-        files = {
-            'file': open(filename, 'rb'),
-            'folderPath': folder_path,
-            'fileName': filename,
-            'options': '{"access": "PUBLIC_INDEXABLE", "overwrite": "true"}'
-        }
-        response = requests.post(url, headers=headers, files=files)
-        if response.status_code == 201:
-            print(f"Page file uploaded succesfully: {filename}")
-        else:
-            print(f"Failed to upload image: {filename}")
-            print(f"Response status code: {response.status_code}")
-            print(f"Response text: {response.text}")
-        os.remove(filename)
-
+        with open(filename, 'rb') as file:
+            files = {
+                'file': file,
+                'folderPath': folder_path,
+                'fileName': filename,
+                'options': '{"access": "PUBLIC_INDEXABLE", "overwrite": "true"}'
+            }
+            response = requests.post(url, headers=headers, files=files)
+            if response.status_code == 201:
+                print(f"Page file uploaded succesfully: {filename}")
+            else:
+                print(f"Failed to upload image: {filename}")
+                print(f"Response status code: {response.status_code}")
+                # print(f"Response text: {response.text}")
+            os.remove(filename)
+ 
     return
 
 # Creates a website page in HubSpot

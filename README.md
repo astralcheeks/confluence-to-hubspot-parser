@@ -46,9 +46,11 @@ confluence_base_url = 'https://youraccount.atlassian.net/wiki'
 # HubSpot API credentials
 hubspot_access_token = 'access-token-here'
 hubspot_base_url = 'https://api.hubspot.com'
-
-# Library for HubSpot account
 hubspot_library_url = 'https://youraccountnumber.fs1.hubspotusercontent-na1.net/hubfs/youraccountnumber/library'
+
+# Hubspot parameters
+template_path = '/PathToYourTemplate.html'
+domain = 'yourhubspotdomain.com'
 ```
 
 Within the library URL, you can replace the path with any sub-folder you like to port page attachments there instead.
